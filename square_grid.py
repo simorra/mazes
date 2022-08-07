@@ -88,5 +88,5 @@ class SquareGrid(Grid):
             x = col*cell_size + cell_size//2 + padding_x
             y = row*cell_size + cell_size//2 + padding_y
             to_draw.append(shapes.Circle(x, y, cell_size//4, segments=30,
-                color=(0, 200, 0), batch=batch))
+                color=(255, 204, 0), batch=batch))
         batch.draw()
