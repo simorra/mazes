@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from cell import Cell
 
 class WallTable:
@@ -38,3 +39,10 @@ class WallTable:
         if c1.id <= c2.id:
             return c1.id*self.N + c2.id
         return c2.id*self.N + c1.id
+
+    def all_pairs(self) -> List[Tuple[int, int]]:
+        """Return all the pairs of ids of cells which share a wall."""
+        pairs = []
+        for key in self.table:
+            pairs.append((key//self.N, key%self.N))
+        return pairs
