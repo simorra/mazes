@@ -68,7 +68,6 @@ class SquareGrid(Grid):
         # Draw the inner walls
         for cell in self:
             row, col = self.id_to_coords(cell.id)
-
             # Get the coordinates of the bottom left corner of the cell
             x_base = col*cell_size + padding_x
             y_base = row*cell_size + padding_y
@@ -85,11 +84,9 @@ class SquareGrid(Grid):
         # Mark the specified cell with a dot
         if marked_cell:
             row, col = self.id_to_coords(marked_cell.id)
-
             # Get the coordinates of the center of the cell
             x = col*cell_size + cell_size//2 + padding_x
             y = row*cell_size + cell_size//2 + padding_y
             to_draw.append(shapes.Circle(x, y, cell_size//4, segments=30,
                 color=(0, 200, 0), batch=batch))
-
         batch.draw()
