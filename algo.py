@@ -4,20 +4,6 @@ from cell import Cell
 from disjoint_set import DisjointSet
 import random
 
-def aldous_broder(grid: Grid) -> Iterator[Cell]:
-    curr = grid.random_cell()
-    curr.visited = True
-    num_visited_cells = 1
-    yield curr
-    while num_visited_cells < grid.rows*grid.cols:
-        neighbour = random.choice(curr.neighbours)
-        if not neighbour.visited:
-            grid.remove_wall(curr.id, neighbour.id)
-            neighbour.visited = True
-            num_visited_cells += 1
-        curr = neighbour
-        yield curr
-
 def randomized_dfs(grid: Grid) -> Iterator[Cell]:
     stack = [grid.random_cell()]
     while stack:
