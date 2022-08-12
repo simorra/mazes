@@ -8,49 +8,43 @@ class SquareGrid(Grid):
     def __init__(self, rows: int, cols: int) -> None:
         super().__init__(rows, cols)
         # Init neighbours and walls
-        for i in range(self.rows):
-            for j in range(self.cols):
-                curr = self[i][j]
-                if south_cell := self.south(curr):
-                    curr.neighbours.append(south_cell)
-                    self.walls.add(curr, south_cell)
-                if west_cell := self.west(curr):
-                    curr.neighbours.append(west_cell)
-                    self.walls.add(curr, west_cell)
-                if north_cell := self.north(curr):
-                    curr.neighbours.append(north_cell)
-                    self.walls.add(curr, north_cell)
-                if east_cell := self.east(curr):
-                    curr.neighbours.append(east_cell)
-                    self.walls.add(curr, east_cell)
+        for cell in self:
+            if south_cell := self.south(cell):
+                cell.neighbours.append(south_cell)
+                self.walls.add(cell, south_cell)
+            if west_cell := self.west(cell):
+                cell.neighbours.append(west_cell)
+                self.walls.add(cell, west_cell)
+            if north_cell := self.north(cell):
+                cell.neighbours.append(north_cell)
+                self.walls.add(cell, north_cell)
+            if east_cell := self.east(cell):
+                cell.neighbours.append(east_cell)
+                self.walls.add(cell, east_cell)
 
     def south(self, cell: Cell) -> Cell:
         """Return the cell below the given one."""
-        row, col = self.id_to_coords(cell.id)
-        if row > 0:
-            return self[row-1][col]
-        return None
+        if cell.id < self.cols: # first row
+            return None
+        return self[cell.id - self.cols]
     
     def west(self, cell: Cell) -> Cell:
         """Return the cell to the left of the given one."""
-        row, col = self.id_to_coords(cell.id)
-        if col > 0:
-            return self[row][col-1]
-        return None
+        if cell.id % self.cols == 0: # first column
+            return None
+        return self[cell.id - 1]
 
     def north(self, cell: Cell) -> Cell:
         """Return the cell above the given one."""
-        row, col = self.id_to_coords(cell.id)
-        if row < self.rows-1:
-            return self[row+1][col]
-        return None
+        if cell.id >= (self.rows-1) * self.cols: # last row
+            return None
+        return self[cell.id + self.cols]
 
     def east(self, cell: Cell) -> Cell:
         """Return the cell to the right of the given one."""
-        row, col = self.id_to_coords(cell.id)
-        if col < self.cols-1:
-            return self[row][col+1]
-        return None
+        if cell.id % self.cols == self.cols-1: # last column
+            return None
+        return self[cell.id + 1]
 
     def draw(self, window: pyglet.window.Window, marked_cell: Cell = None) -> None:
         w_width, w_height = window.get_size()
@@ -67,7 +61,7 @@ class SquareGrid(Grid):
             color=(0, 0, 0), border_color=(220, 220, 220), batch=batch))
         # Draw the inner walls
         for cell in self:
-            row, col = self.id_to_coords(cell.id)
+            row, col = self.coords(cell.id)
             # Get the coordinates of the bottom left corner of the cell
             x_base = col*cell_size + padding_x
             y_base = row*cell_size + padding_y
@@ -83,7 +77,7 @@ class SquareGrid(Grid):
                     color=(220, 220, 220), batch=batch))
         # Mark the specified cell with a dot
         if marked_cell:
-            row, col = self.id_to_coords(marked_cell.id)
+            row, col = self.coords(marked_cell.id)
             # Get the coordinates of the center of the cell
             x = col*cell_size + cell_size//2 + padding_x
             y = row*cell_size + cell_size//2 + padding_y

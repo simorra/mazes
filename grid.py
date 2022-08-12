@@ -18,29 +18,22 @@ class Grid:
     def __init__(self, rows: int, cols: int) -> None:
         self.rows = rows
         self.cols = cols
-        self.cells = [None] * rows
-        for i in range(rows):
-            self.cells[i] = [Cell(i*cols + j) for j in range(cols)]
+        self.cells = [Cell(i) for i in range(rows * cols)] # cells are stored in a flat array
         self.walls = WallTable(rows * cols)
 
-    def __getitem__(self, key: int) -> List[Cell]:
+    def __getitem__(self, key: int) -> Cell:
         return self.cells[key]
 
     def __iter__(self) -> Iterator[Cell]:
-        for i in range(self.rows):
-            for j in range(self.cols):
-                yield self[i][j]
+        for i in range(self.rows * self.cols):
+            yield self[i]
 
-    def get_by_id(self, id: int) -> Cell:
-        row, col = self.id_to_coords(id)
-        return self[row][col]
-
-    def id_to_coords(self, id: int) -> Tuple[int, int]:
-        """Given the id of a cell, return the corresponding coordinates."""
+    def coords(self, id: int) -> Tuple[int, int]:
+        """Given the id of a cell, return its row and column."""
         return id // self.cols, id % self.cols
 
     def random_cell(self) -> Cell:
-        return self[randrange(self.rows)][randrange(self.cols)]
+        return self[randrange(self.rows * self.cols)]
 
     def draw(self, window: pyglet.window.Window, marked_cell: Cell = None) -> None:
         """Draw the maze on the given window."""

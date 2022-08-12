@@ -39,8 +39,8 @@ def randomized_kruskal(grid: Grid) -> Iterator[Cell]:
     random.shuffle(wall_list)
     for wall in wall_list:
         if cell_sets.find(wall[0]) != cell_sets.find(wall[1]):
-            c1 = grid.get_by_id(wall[0])
-            c2 = grid.get_by_id(wall[1])
+            c1 = grid[wall[0]]
+            c2 = grid[wall[1]]
             yield c1
             grid.walls.remove(c1, c2)
             yield c2
