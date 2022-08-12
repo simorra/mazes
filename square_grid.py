@@ -11,16 +11,16 @@ class SquareGrid(Grid):
         for cell in self:
             if south_cell := self.south(cell):
                 cell.neighbours.append(south_cell)
-                self.walls.add(cell, south_cell)
+                self.add_wall(cell.id, south_cell.id)
             if west_cell := self.west(cell):
                 cell.neighbours.append(west_cell)
-                self.walls.add(cell, west_cell)
+                self.add_wall(cell.id, west_cell.id)
             if north_cell := self.north(cell):
                 cell.neighbours.append(north_cell)
-                self.walls.add(cell, north_cell)
+                self.add_wall(cell.id, north_cell.id)
             if east_cell := self.east(cell):
                 cell.neighbours.append(east_cell)
-                self.walls.add(cell, east_cell)
+                self.add_wall(cell.id, east_cell.id)
 
     def south(self, cell: Cell) -> Cell:
         """Return the cell below the given one."""
@@ -67,11 +67,11 @@ class SquareGrid(Grid):
             y_base = row*cell_size + padding_y
 
             # Draw only the northen and eastern inner walls
-            if row < self.rows-1 and self.walls.get(cell, self.north(cell)): # north
+            if row < self.rows-1 and self.has_wall(cell.id, self.north(cell).id): # north
                 to_draw.append(shapes.Line(x_base, y_base + cell_size,
                     x_base + cell_size, y_base + cell_size,
                     color=(220, 220, 220), batch=batch))
-            if col < self.cols-1 and self.walls.get(cell, self.east(cell)): # east
+            if col < self.cols-1 and self.has_wall(cell.id, self.east(cell).id): # east
                 to_draw.append(shapes.Line(x_base + cell_size, y_base,
                     x_base + cell_size, y_base + cell_size,
                     color=(220, 220, 220), batch=batch))

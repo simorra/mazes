@@ -32,6 +32,18 @@ class Grid:
         """Given the id of a cell, return its row and column."""
         return id // self.cols, id % self.cols
 
+    def has_wall(self, id1, id2) -> bool:
+        return self.walls.get(id1, id2)
+
+    def add_wall(self, id1, id2) -> None:
+        self.walls.add(id1, id2)
+
+    def remove_wall(self, id1, id2) -> None:
+        self.walls.remove(id1, id2)
+
+    def get_all_walls(self) -> List[Tuple[int, int]]:
+        return self.walls.all_pairs()
+
     def random_cell(self) -> Cell:
         return self[randrange(self.rows * self.cols)]
 
