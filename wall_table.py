@@ -1,5 +1,4 @@
 from typing import List, Tuple
-from cell import Cell
 
 class WallTable:
     """
@@ -15,30 +14,30 @@ class WallTable:
         self.N = num_cells
         self.table = {}
 
-    def add(self, c1: Cell, c2: Cell) -> None:
-        """Add a wall between c1 and c2."""
-        self.table[self.key_of(c1, c2)] = True
+    def add(self, id1: int, id2: int) -> None:
+        """Add a wall between the cells with the given ids."""
+        self.table[self.key_of(id1, id2)] = True
 
-    def remove(self, c1: Cell, c2: Cell) -> None:
-        """Remove the wall between c1 and c2, if present."""
-        if self.get(c1, c2):
-            del self.table[self.key_of(c1, c2)]
+    def remove(self, id1: int, id2: int) -> None:
+        """If present, remove the wall between the cells with the given ids."""
+        if self.get(id1, id2):
+            del self.table[self.key_of(id1, id2)]
 
-    def get(self, c1: Cell, c2: Cell) -> bool:
+    def get(self, id1: int, id2: int) -> bool:
         """
-        Access the table's entry associated with the cells
-        c1 and c2. Returns True if there is a wall between them,
+        Access the table's entry associated with the cells with
+        the given ids. Returns True if there is a wall between them,
         False otherwise.
         """
-        return self.table.get(self.key_of(c1, c2), False)
+        return self.table.get(self.key_of(id1, id2), False)
 
-    def key_of(self, c1: Cell, c2: Cell) -> int:
-        """Each pair of cell is associated with a key, used internally."""
+    def key_of(self, id1: int, id2: int) -> int:
+        """Each pair of cell's ids is associated with a key, used internally."""
         # The keys are unique, except for symmetric pairs of cells,
         # which get the same key
-        if c1.id <= c2.id:
-            return c1.id*self.N + c2.id
-        return c2.id*self.N + c1.id
+        if id1 <= id2:
+            return id1*self.N + id2
+        return id2*self.N + id1
 
     def all_pairs(self) -> List[Tuple[int, int]]:
         """Return all the pairs of ids of cells which share a wall."""
