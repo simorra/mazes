@@ -31,3 +31,25 @@ def randomized_kruskal(grid: Grid) -> Iterator[Cell]:
             grid.remove_wall(c1.id, c2.id)
             yield c2
             cell_sets.union(c1.id, c2.id)
+
+def growing_tree(grid: Grid) -> Iterator[Cell]:
+    active_cells = [grid.random_cell()]
+    active_cells[0].visited = True
+    while active_cells:
+        idx = random.randrange(len(active_cells))
+        curr = active_cells[idx]
+        unvisited_neighbours = list(filter(lambda cell: not cell.visited, curr.neighbours))
+        if unvisited_neighbours:
+            neighbour = random.choice(unvisited_neighbours)
+            yield curr
+            grid.remove_wall(curr.id, neighbour.id)
+            yield neighbour
+            neighbour.visited = True
+            active_cells.append(neighbour)
+        else:
+            # To get constant time complexity, always remove
+            # from the end of the list. Since the elements are 
+            # extracted randomly, it doesn't matter if we alter
+            # their order by swapping two of them
+            active_cells[idx], active_cells[-1] = active_cells[-1], active_cells[idx]
+            active_cells.pop()
